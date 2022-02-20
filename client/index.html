@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <meta charset="utf-8" />
+
+    <style>
+      * {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  font-family: "Roboto Mono";
+}
+
+input {
+  text-transform: uppercase;
+  font-family: "Roboto Mono";
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: black;
+  border: 2px solid white;
+}
+
+input:focus {
+  background-color: rgb(53, 53, 53);
+  outline: none;
+}
+
+#game-title {
+  font-size: 6rem;
+  letter-spacing: 1rem;
+  margin-bottom: 4rem;
+}
+
+#ready-button {
+  background-color: black;
+  width: 15vw;
+  height: 10vh;
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
+
+#ready-button:hover {
+  filter: brightness(80%);
+  background-color: gray;
+}
+
+#room-code {
+  background-color: black;
+  opacity: 90%;
+  border-radius: 2rem;
+  padding: 2rem;
+  left: 5rem;
+  top: 5rem;
+  position: absolute;
+  z-index: 1;
+}
+
+#room-code h1 {
+  opacity: 100%;
+  font-size: 2.5rem;
+  text-shadow: 
+    -1px 1px 2px #fff,
+	  1px 1px 2px #fff,
+	  1px -1px 0 #fff,
+	  -1px -1px 0 #fff;
+}
+
+#room-code h2 {
+  opacity: 100%;
+  font-size: 2rem;
+  color: white;
+}
+
+#waiting-text {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  color: rgb(194, 194, 194);
+  text-shadow: 
+    -1px 1px 5px #000,
+	  1px 1px 5px #000,
+	  1px -1px 5px #000,
+	  -1px -1px 5px #000;
+  z-index: 1;
+}
+
+.guess-choices {
+  position: absolute;
+  display: grid;
+  text-align: center;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  background-color: black;
+  width: 25vw;
+  height: 25vw;
+  border-radius: 1rem;
+}
+
+.guess-choice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  border-radius: 1rem;
+  margin: auto;
+  color: white;
+  background-color: gray;
+  font-size: 2rem;
+}
+
+.guess-choice:last-of-type {
+  grid-column: span 4;
+}
+
+.guess-choice:hover {
+  filter: brightness(120%);
+}
+
+.choice-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 25vw;
+  height: 25vw;
+  background-color: black;
+  color: white;
+  font-size: 8rem;
+  border-radius: 1rem;
+}
+
+.lobby-menu {
+  text-align: start;
+  padding: 8rem;
+  background-color: rgb(73, 70, 63);
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+}
+
+.lobby-menu {
+  color: white;
+}
+
+.lobby-option {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.lobby-option:first-of-type {
+  margin-bottom: 4rem;
+}
+
+.lobby-option button {
+  background-color: rgb(255, 255, 255);
+  font-family: "Roboto Mono";
+  font-size: 1.5rem;
+  border: none;
+  border-radius: .5rem;
+  width: 100%;
+  align-self: center;
+  margin-top: 1rem;
+}
+
+.lobby-option button:hover {
+  background-color: #ecb2b2;
+  color: white;
+}
+
+#error-message {
+  height: 1rem;
+  color: red;
+}
+
+.player-name-text {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 5px solid black;
+  font-size: 2rem;
+  padding: 1rem;
+  display: block;
+  position: absolute;
+  box-shadow: 0px 0px 15px 5px rgb(185, 131, 131);
+}
+
+#player-this {
+  bottom: 5px;
+  right: 30vw;
+}
+
+#player-left {
+  bottom: 5px;
+  left: 5px;
+}
+
+#player-top {
+  top: 5px;
+  left: 30vw;
+}
+
+#player-right {
+  top: 5px;
+  right: 5px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="ready-button" class="hidden">Ready!</div>
+    <div id="room-code" class="hidden">
+      <h1>Room Code:</h1>
+      <h2 id="room-code-text">AAAAA</h2>
+    </div>
+    <div id="waiting-text" class="hidden">Waiting for other players...</div>
+    <div class="guess-choices hidden">
+      <div class='guess-choice' id='0'>0</div>
+      <div class='guess-choice' id='1'>1</div>
+      <div class='guess-choice' id='2'>2</div>
+      <div class='guess-choice' id='3'>3</div>
+      <div class='guess-choice' id='4'>4</div>
+      <div class='guess-choice' id='5'>5</div>
+      <div class='guess-choice' id='6'>6</div>
+      <div class='guess-choice' id='7'>7</div>
+      <div class='guess-choice' id='8'>8</div>
+      <div class='guess-choice' id='9'>9</div>
+      <div class='guess-choice' id='10'>10</div>
+      <div class='guess-choice' id='11'>11</div>
+      <div class='guess-choice' id=':)'>:)</div>
+    </div>
+    <div class="choice-display hidden">5</div>
+    <div class="lobby-menu">
+      <h1 id="game-title">DaVinci Code</h1>
+      <div class="lobby-option">
+        <h2>Name</h2>
+        <input 
+        autocomplete="off"
+        type="text" 
+        id="player-name-input" 
+        placeholder="ENTER YOUR NAME">
+      </div>
+      <div class="lobby-option">
+        <h2>Host a Game</h2>
+        <button id="host-lobby-button">Create Game</button>
+      </div>
+      <div class="lobby-option">
+        <h2>Join a Game</h2>
+        <input
+          autocomplete="off"
+          type="text"
+          id="code-form-id"
+          name="code-form"
+          placeholder="ENTER 5-CHARACTER CODE"
+        />
+        <button type="button" id="enterRoom-id" name="enterRoom">Enter Code</button>
+      </div>
+      <p id="error-message"></p>
+    </div>
+    <div id="player-names">
+      <div class="player-name-text hidden" id="player-this">BingIsGay</div>
+      <div class="player-name-text hidden" id="player-left">IsBingGay</div>
+      <div class="player-name-text hidden" id="player-top">Bing</div>
+      <div class="player-name-text hidden" id="player-right">IsGayBing</div>
+    </div>
+    <script src="'/socket.io/socket.io.js""></script>
+  </body>
+</html>
