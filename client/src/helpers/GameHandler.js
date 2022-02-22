@@ -9,6 +9,7 @@ export default class GameHandler {
 
     // opponent
     this.currentGuessingCard = {};
+    this.currentGuessingPlayer = {};
 
     // UI
     this.waitingText = "";
@@ -17,9 +18,31 @@ export default class GameHandler {
     this.guessOptions = [];
     this.guessDisplay = null;
 
-    this.changeTurn = (playerNum) => {};
+    this.changeTurn = (playerNum) => {
+      this.isPlayersTurn = this.playerNum === playerNum;
 
-    this.changeGameState = (gameState) => {
+      if (Object.keys(this.currentGuessingPlayer).length !== 0) {
+        this.currentGuessingPlayer.playerText.classList.remove(
+          "this-player-chosen"
+        );
+      }
+
+      if (this.playerName.playerNum === playerNum) {
+        this.playerName.playerText.classList.add("this-player-chosen");
+        this.currentGuessingPlayer = this.playerName;
+      } else if (this.leftOpponent.playerNum === playerNum) {
+        this.leftOpponent.playerText.classList.add("this-player-chosen");
+        this.currentGuessingPlayer = this.leftOpponent;
+      } else if (this.topOpponent.playerNum === playerNum) {
+        this.topOpponent.playerText.classList.add("this-player-chosen");
+        this.currentGuessingPlayer = this.topOpponent;
+      } else if (this.rightOpponent.playerNum === playerNum) {
+        this.rightOpponent.playerText.classList.add("this-player-chosen");
+        this.currentGuessingPlayer = this.rightOpponent;
+      }
+    };
+
+    this.changeGameState = (gameState, currentPlayerTurn) => {
       this.gameState = gameState;
       console.log(`GameState: ${this.gameState}`);
 
@@ -31,6 +54,7 @@ export default class GameHandler {
       } else if (gameState === "Start") {
         this.roomCode.classList.add("hidden");
         this.waitingText.classList.add("hidden");
+        this.changeTurn(currentPlayerTurn);
       }
     };
 
@@ -66,16 +90,23 @@ export default class GameHandler {
       document.getElementById("room-code-text").innerText = scene.roomKey;
 
       // guess options
-      this.optionsContainer = document.querySelector(".guess-choices");
+      this.optionsContainer = document.getElementById(
+        "guess-choices-container"
+      );
       this.guessOptions = document.querySelectorAll(".guess-choice");
       this.guessDisplay = document.querySelector(".choice-display");
+      this.xButton = document.getElementById("x-button");
 
       this.guessOptions.forEach((element) => {
         element.addEventListener("click", () => {
           let guess = element.innerHTML;
-          this.optionsContainer.classList.add("hidden");
+          this.optionsContainer.style.display = "none";
           scene.socket.emit("endingGuess", guess, this.scene.roomKey);
         });
+      });
+
+      this.xButton.addEventListener("click", () => {
+        this.optionsContainer.style.display = "none";
       });
     };
 
@@ -99,24 +130,44 @@ export default class GameHandler {
     };
 
     this.displayPlayerNames = (names) => {
+      this.playerNames = names;
+
       document.querySelectorAll(".player-name-text").forEach((e) => {
         e.classList.remove("hidden");
       });
-      const playerName = document.getElementById("player-this");
-      const leftOpponent = document.getElementById("player-left");
-      const topOpponent = document.getElementById("player-top");
-      const rightOpponent = document.getElementById("player-right");
 
-      playerName.innerText = names[this.playerNum];
-      leftOpponent.innerText = names[(this.playerNum + 1) % 4] || "no name";
-      topOpponent.innerText = names[(this.playerNum + 2) % 4] || "no name";
-      rightOpponent.innerText = names[(this.playerNum + 3) % 4] || "no name";
+      this.playerName = {
+        playerText: document.getElementById("player-this"),
+        playerNum: this.playerNum,
+      };
+      this.leftOpponent = {
+        playerText: document.getElementById("player-left"),
+        playerNum: (this.playerNum + 1) % 4,
+      };
+      this.topOpponent = {
+        playerText: document.getElementById("player-top"),
+        playerNum: (this.playerNum + 2) % 4,
+      };
+      this.rightOpponent = {
+        playerText: document.getElementById("player-right"),
+        playerNum: (this.playerNum + 3) % 4,
+      };
+
+      this.playerName.playerText.innerText = names[this.playerNum];
+      this.leftOpponent.playerText.innerText =
+        names[(this.playerNum + 1) % 4] || "no name";
+      this.topOpponent.playerText.innerText =
+        names[(this.playerNum + 2) % 4] || "no name";
+      this.rightOpponent.playerText.innerText =
+        names[(this.playerNum + 3) % 4] || "no name";
     };
 
     this.startGuess = (owner, cardPos) => {
-      //   if (scene.GameHandler.isPlayersTurn) {
+      if (!scene.GameHandler.isPlayersTurn) return;
+
       // Show options
       this.optionsContainer.classList.remove("hidden");
+      this.optionsContainer.style.display = "flex";
 
       // Inform all players current player is guessing
       this.scene.socket.emit(
@@ -125,7 +176,6 @@ export default class GameHandler {
         cardPos,
         this.scene.roomKey
       );
-      //   }
     };
 
     this.createOutline = (card) => {
@@ -152,6 +202,7 @@ export default class GameHandler {
 
     this.displayCorrectValue = (correctValue) => {
       this.currentGuessingCard.updateValue(correctValue);
+      this.currentGuessingCard.removeInteractive();
       this.currentGuessingCard = {};
     };
 
@@ -162,9 +213,33 @@ export default class GameHandler {
       scene.DeckHandler.disablePlayerDeckLost();
     };
 
+    this.gameEndLoss = (winningPlayer) => {
+      let display = document.getElementById("end-game-display");
+      display.classList.remove("hidden");
+      document.getElementById(
+        "end-game-text"
+      ).innerText = `${this.playerNames[winningPlayer]} Wins!`;
+    };
+
+    this.gameEndWin = () => {
+      let display = document.getElementById("end-game-display");
+      display.classList.remove("hidden");
+      document.getElementById("end-game-text").innerText = "You Win!";
+    };
+
     // a player has lost
     this.opponentHasLost = (playerNum) => {
+      // fade out opponent cards
       scene.DeckHandler.disableOpponentDeckLost(playerNum);
+
+      // fade out opponent name
+      if (this.leftOpponent.playerNum === playerNum) {
+        this.leftOpponent.playerText.classList.add("lost");
+      } else if (this.topOpponent.playerNum === playerNum) {
+        this.topOpponent.playerText.classList.add("lost");
+      } else if (this.rightOpponent.playerNum === playerNum) {
+        this.rightOpponent.playerText.classList.add("lost");
+      }
     };
 
     this.createPreGameState();

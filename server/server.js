@@ -70,11 +70,16 @@ io.on("connection", (socket) => {
 
     // create a room
     gameRooms[key] = {
+      // pre-game states
       roomKey: key,
       players: {},
       playerHands: [],
+      remaining: [],
       numPlayers: 0,
       numReadyPlayers: 0,
+
+      // during-game states
+      currentPlayerTurn: 0,
       lostPlayers: [],
     };
     socket.emit("roomCreated", key);
@@ -122,7 +127,7 @@ io.on("connection", (socket) => {
 
     // all players are ready
     // start game
-    if (roomInfo.numReadyPlayers >= 2) {
+    if (roomInfo.numReadyPlayers >= 4) {
       console.log("STARTING GAME");
 
       let playerNames = [];
@@ -135,7 +140,13 @@ io.on("connection", (socket) => {
         // console.log(value.playerId);
 
         let deck = hideOpponentDecks(value.playerId, roomKey);
-        io.to(value.playerId).emit("startGame", deck, remaining, playerNames);
+        io.to(value.playerId).emit(
+          "startGame",
+          deck,
+          roomInfo.remaining,
+          playerNames,
+          roomInfo.currentPlayerTurn
+        );
       }
     }
   });
@@ -167,7 +178,6 @@ io.on("connection", (socket) => {
           // all player's cards were revealed
           if (value.cardsRevealed === 6) {
             roomInfo.lostPlayers.push(value.playerNum);
-
             if (roomInfo.lostPlayers.length === 3) {
               handleGameEnd(roomInfo);
             } else {
@@ -182,10 +192,10 @@ io.on("connection", (socket) => {
     else {
       io.to(roomKey).emit("incorrectGuess");
       // change turns
-      roomInfo.currentPlayerTurn = roomInfo.currentPlayerTurn + (1 % 4);
-      if (roomInfo.currentPlayerTurn in roomInfo.lostPlayers) {
-        roomInfo.currentPlayerTurn = roomInfo.currentPlayerTurn + (1 % 4);
-      }
+      do {
+        roomInfo.currentPlayerTurn = (roomInfo.currentPlayerTurn + 1) % 4;
+      } while (roomInfo.lostPlayers.includes(roomInfo.currentPlayerTurn));
+
       io.to(roomKey).emit("nextTurn", roomInfo.currentPlayerTurn);
     }
 
@@ -247,6 +257,8 @@ const createCards = (roomKey) => {
   roomInfo.playerHands.push(deckPlayer2);
   roomInfo.playerHands.push(deckPlayer3);
 
+  roomInfo.remaining = remaining;
+
   roomInfo.playerHands.forEach((deck) => {
     deck.forEach((card) => {
       if (card.value === -1) card.value = ":)";
@@ -257,6 +269,7 @@ const createCards = (roomKey) => {
   deckPlayer1 = [];
   deckPlayer2 = [];
   deckPlayer3 = [];
+  remaining = [];
 };
 
 const shuffleDeck = (deck) => {
@@ -306,13 +319,24 @@ const hideOpponentDecks = (socketId, roomKey) => {
 };
 
 const handleGameEnd = (roomInfo) => {
-  Object.keys(roomInfo.players).forEach((player) => {
-    if (player.playerNum in roomInfo.lostPlayers) {
-      io.to(player.playerId).emit("playerLoss");
-    } else {
-      io.to(player.playerId).emit("playerWin");
+  let winningPlayer;
+  console.log("lostPlayers:", roomInfo.lostPlayers);
+  for (const [key, value] of Object.entries(roomInfo.players)) {
+    console.log("value", value.playerNum);
+    if (!roomInfo.lostPlayers.includes(value.playerNum)) {
+      winningPlayer = value.playerNum;
+      break;
     }
-  });
+  }
+
+  console.log("winningPlayer:", winningPlayer);
+  for (const [key, value] of Object.entries(roomInfo.players)) {
+    if (value.playerNum === winningPlayer) {
+      io.to(value.playerId).emit("playerWin");
+    } else {
+      io.to(value.playerId).emit("playerLoss", winningPlayer);
+    }
+  }
 };
 
 const getPlayerRoomKey = (socketId) => {
@@ -335,7 +359,7 @@ const getPlayerRoomKey = (socketId) => {
 const codeGenerator = () => {
   let code = "";
   let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 4; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
 

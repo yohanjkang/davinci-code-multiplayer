@@ -39,19 +39,20 @@ export default class Game extends Phaser.Scene {
       "../../src/assets/card-black-faded.png"
     );
     this.load.image("background-gray", "../../src/assets/background-gray.png");
-    this.load.image("background", "../../src/assets/main-background.png");
+    this.load.image("background", "../../src/assets/main-background-2.png");
     this.load.image("card-outline", "../../src/assets/card-outline.png");
+
+    this.load.audio("theme", "../../src/assets/audio/raindrop-flower.mp3");
   }
 
   create() {
-    this.backgroundSprite = this.add.image(
-      this.width / 2,
-      this.height / 2,
-      "background"
-    );
+    // // music
+    // this.song = this.sound.add("theme", { volume: 0.5 });
+    // this.song.loop = true;
+    // this.song.play();
+
     this.cardOutline = this.add.image(0, 0, "card-outline").setVisible(false);
     this.cardOutline.setScale(0.5);
-    this.backgroundSprite.setDisplaySize(this.width, this.height);
 
     this.SocketHandler = new SocketHandler(this);
     this.GameHandler = new GameHandler(this);

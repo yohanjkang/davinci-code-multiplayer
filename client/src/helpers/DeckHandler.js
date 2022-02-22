@@ -56,7 +56,7 @@ export default class DeckHandler {
           x: xInit,
           y: yInit + index * this.cardGap,
           color: deckCard.color,
-          value: "",
+          value: "<",
           owner: deckCard.owner,
           cardPos: deckCard.cardPos,
         });
@@ -85,7 +85,7 @@ export default class DeckHandler {
           x: xInit - index * this.cardGap,
           y: yInit,
           color: deckCard.color,
-          value: "",
+          value: "<",
           owner: deckCard.owner,
           cardPos: deckCard.cardPos,
         });
@@ -110,7 +110,7 @@ export default class DeckHandler {
           x: xInit,
           y: yInit - index * this.cardGap,
           color: deckCard.color,
-          value: "",
+          value: "<",
           owner: deckCard.owner,
           cardPos: deckCard.cardPos,
         });

@@ -6,17 +6,22 @@ export default class SocketHandler {
       scene.DeckHandler.createPlayerDeck(player.deck);
     });
 
-    scene.socket.on("startGame", (decks, remaining, playerNames) => {
-      scene.GameHandler.changeGameState("Start");
-      scene.GameHandler.displayPlayerNames(playerNames);
+    scene.socket.on(
+      "startGame",
+      (decks, remaining, playerNames, currentPlayerTurn) => {
+        scene.GameHandler.displayPlayerNames(playerNames);
+        scene.GameHandler.changeGameState("Start", currentPlayerTurn);
 
-      // set opponent and remaining cards
-      scene.DeckHandler.createOpponentDecks(decks);
-      scene.DeckHandler.createRemainingCards(remaining);
-    });
+        // set opponent and remaining cards
+        scene.DeckHandler.createOpponentDecks(decks);
+        scene.DeckHandler.createRemainingCards(remaining);
+      }
+    );
 
     // change turn to next player
-    scene.socket.on("nextTurn", (playerNum) => {});
+    scene.socket.on("nextTurn", (playerNum) => {
+      scene.GameHandler.changeTurn(playerNum);
+    });
 
     // another player is guessing
     // create an outline on the card that's being guessed
@@ -54,14 +59,14 @@ export default class SocketHandler {
 
     // game has ended
     // this player has lost
-    scene.socket.on("playerLoss", () => {
-      alert("You lose!");
+    scene.socket.on("playerLoss", (winningPlayer) => {
+      scene.GameHandler.gameEndLoss(winningPlayer);
     });
 
     //game has ended
     // this player has won
     scene.socket.on("playerWin", () => {
-      alert("You win!");
+      scene.GameHandler.gameEndWin();
     });
 
     scene.socket.on("disconnected", (data) => {

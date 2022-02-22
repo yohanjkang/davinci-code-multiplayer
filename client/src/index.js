@@ -11,7 +11,7 @@ const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
 
 const config = {
   type: Phaser.AUTO,
-  backgroundColor: "#e6a3a3",
+  transparent: true,
   dom: {
     createContainer: true,
   },
