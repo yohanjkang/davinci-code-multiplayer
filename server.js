@@ -38,8 +38,8 @@ const io = require("socket.io")(http, {
   },
 });
 
-// express.use(cors());
-// express.use(serveStatic(__dirname + "/client/dist"));
+app.use(cors());
+app.use(serveStatic(__dirname + "/client/dist"));
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
