@@ -27,7 +27,7 @@ export default class Lobby extends Phaser.Scene {
   create() {
     const scene = this;
 
-    scene.socket = io.connect("http://localhost:3000");
+    scene.socket = io.connect("https://davinci-code-game.herokuapp.com/");
 
     // player name
     scene.playerNameInput = document.getElementById("player-name-input");

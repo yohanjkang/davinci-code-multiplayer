@@ -2,6 +2,9 @@ const express = require("express");
 var app = express();
 const http = require("http").createServer(app);
 const cors = require("cors");
+const path = require("path");
+const serveStatic = require("serve-static");
+const { Server } = require("http");
 
 let deckPlayer0 = [];
 let deckPlayer1 = [];
@@ -30,10 +33,13 @@ const gameRooms = {
 
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: "https://davinci-code-game.herokuapp.com/",
     methods: ["GET", "POST"],
   },
 });
+
+express.use(cors());
+express.use(serveStatic(__dirname + "/client/dist"));
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -222,7 +228,9 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(3000, () => {
+const port = process.env.PORT || 3000;
+
+http.listen(port, () => {
   console.log("SERVER RUNNING");
 });
 
