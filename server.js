@@ -33,8 +33,8 @@ const gameRooms = {
 
 const io = require("socket.io")(http, {
   cors: {
-    // origin: "https://davinci-code-game.herokuapp.com/",
-    origin: "http://localhost:8080",
+    origin: "https://davinci-code-game.herokuapp.com/",
+    //origin: "http://localhost:8080",
     methods: ["GET", "POST"],
   },
 });

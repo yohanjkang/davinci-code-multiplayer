@@ -9,282 +9,282 @@
     <title>DaVinci Code</title>
     <style>
       html {
-        font-size: 16px;
-      }
+  font-size: 16px;
+}
 
-      @media screen and (max-width: 1280px) {
-        html {
-          font-size: 12px;
-        }
-      }
+@media screen and (max-width: 1280px) {
+  html {
+    font-size: 12px;
+  }
+}
 
-      * {
-        margin: 0;
-        padding: 0;
-      }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-      body {
-        background-image: url(./src/assets/main-background-2.png);
-        background-position: center;
-        background-repeat: no-repeat;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        user-select: none;
-        font-family: "Roboto Mono";
-      }
+body {
+  background-image: url(./src/assets/main-background-2.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  font-family: "Roboto Mono";
+}
 
-      input {
-        text-transform: uppercase;
-        font-family: "Roboto Mono";
-        color: white;
-        padding: 1rem;
-        border-radius: 1rem;
-        background-color: black;
-        border: 2px solid white;
-      }
+input {
+  text-transform: uppercase;
+  font-family: "Roboto Mono";
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: black;
+  border: 2px solid white;
+}
 
-      input:focus {
-        background-color: rgb(53, 53, 53);
-        outline: none;
-      }
+input:focus {
+  background-color: rgb(53, 53, 53);
+  outline: none;
+}
 
-      #game-title {
-        font-size: 6rem;
-        letter-spacing: 1rem;
-        margin-bottom: 4rem;
-      }
+#game-title {
+  font-size: 6rem;
+  letter-spacing: 1rem;
+  margin-bottom: 4rem;
+}
 
-      #ready-button {
-        background-color: black;
-        width: 15vw;
-        height: 10vh;
-        color: white;
-        font-size: 2rem;
-        position: absolute;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 1rem;
-      }
+#ready-button {
+  background-color: black;
+  width: 15vw;
+  height: 10vh;
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
 
-      #ready-button:hover {
-        filter: brightness(80%);
-        background-color: gray;
-      }
+#ready-button:hover {
+  filter: brightness(80%);
+  background-color: gray;
+}
 
-      #room-code {
-        background-color: black;
-        opacity: 90%;
-        border-radius: 2rem;
-        padding: 2rem;
-        left: 5rem;
-        top: 5rem;
-        position: absolute;
-        z-index: 1;
-      }
+#room-code {
+  background-color: black;
+  opacity: 90%;
+  border-radius: 2rem;
+  padding: 2rem;
+  left: 5rem;
+  top: 5rem;
+  position: absolute;
+  z-index: 1;
+}
 
-      #room-code h1 {
-        opacity: 100%;
-        font-size: 2.5rem;
-        text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff,
-          -1px -1px 0 #fff;
-      }
+#room-code h1 {
+  opacity: 100%;
+  font-size: 2.5rem;
+  text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff,
+    -1px -1px 0 #fff;
+}
 
-      #room-code h2 {
-        opacity: 100%;
-        font-size: 2rem;
-        color: white;
-      }
+#room-code h2 {
+  opacity: 100%;
+  font-size: 2rem;
+  color: white;
+}
 
-      #waiting-text {
-        display: flex;
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        font-size: 4rem;
-        color: rgb(194, 194, 194);
-        text-shadow: -1px 1px 5px #000, 1px 1px 5px #000, 1px -1px 5px #000,
-          -1px -1px 5px #000;
-        z-index: 1;
-      }
+#waiting-text {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  color: rgb(194, 194, 194);
+  text-shadow: -1px 1px 5px #000, 1px 1px 5px #000, 1px -1px 5px #000,
+    -1px -1px 5px #000;
+  z-index: 1;
+}
 
-      #guess-choices-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        position: absolute;
-        background-color: black;
-        width: 25vw;
-        height: 25vw;
-        border-radius: 1rem;
-        z-index: 1;
-      }
+#guess-choices-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
+  background-color: black;
+  width: 25vw;
+  height: 25vw;
+  border-radius: 1rem;
+  z-index: 1;
+}
 
-      #x-button {
-        background-color: gray;
-        border-radius: 50%;
-        margin: 0.5rem;
-        padding: 0.5rem;
-        width: 1rem;
-        height: auto;
-      }
+#x-button {
+  background-color: gray;
+  border-radius: 50%;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 1rem;
+  height: auto;
+}
 
-      .guess-choices {
-        display: grid;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-      }
+.guess-choices {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
 
-      .guess-choice {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 90%;
-        height: 90%;
-        border-radius: 1rem;
-        margin: auto;
-        color: white;
-        background-color: gray;
-        font-size: 2rem;
-        transition: all 0.15s ease-in-out;
-      }
+.guess-choice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  border-radius: 1rem;
+  margin: auto;
+  color: white;
+  background-color: gray;
+  font-size: 2rem;
+  transition: all 0.15s ease-in-out;
+}
 
-      .guess-choice:last-of-type {
-        grid-column: span 4;
-      }
+.guess-choice:last-of-type {
+  grid-column: span 4;
+}
 
-      .guess-choice:hover,
-      #x-button:hover {
-        filter: brightness(120%);
-      }
+.guess-choice:hover,
+#x-button:hover {
+  filter: brightness(120%);
+}
 
-      .choice-display {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        width: 25vw;
-        height: 25vw;
-        background-color: black;
-        color: white;
-        font-size: 8rem;
-        border-radius: 1rem;
-      }
+.choice-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 25vw;
+  height: 25vw;
+  background-color: black;
+  color: white;
+  font-size: 8rem;
+  border-radius: 1rem;
+}
 
-      .lobby-menu {
-        text-align: start;
-        padding: 2rem;
-        color: white;
-        background-color: rgb(73, 70, 63);
-        width: 75vw;
-        height: 75vh;
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-      }
+.lobby-menu {
+  text-align: start;
+  padding: 2rem;
+  color: white;
+  background-color: rgb(73, 70, 63);
+  width: 75vw;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+}
 
-      .lobby-option {
-        width: 40%;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1rem;
-      }
+.lobby-option {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
 
-      .lobby-option:first-of-type {
-        margin-bottom: 4rem;
-      }
+.lobby-option:first-of-type {
+  margin-bottom: 4rem;
+}
 
-      .lobby-option button {
-        background-color: rgb(255, 255, 255);
-        font-family: "Roboto Mono";
-        font-size: 1.5rem;
-        border: none;
-        border-radius: 0.5rem;
-        width: 100%;
-        align-self: center;
-        margin-top: 1rem;
-        transition: all 0.15s ease-in-out;
-      }
+.lobby-option button {
+  background-color: rgb(255, 255, 255);
+  font-family: "Roboto Mono";
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  width: 100%;
+  align-self: center;
+  margin-top: 1rem;
+  transition: all 0.15s ease-in-out;
+}
 
-      .lobby-option button:hover {
-        background-color: #ecb2b2;
-        color: white;
-      }
+.lobby-option button:hover {
+  background-color: #ecb2b2;
+  color: white;
+}
 
-      #error-message {
-        height: 1rem;
-        color: red;
-      }
+#error-message {
+  height: 1rem;
+  color: red;
+}
 
-      .player-name-text {
-        background-color: white;
-        border-radius: 0.5rem;
-        border: 5px solid black;
-        font-size: 2rem;
-        padding: 1rem;
-        display: block;
-        position: absolute;
-        box-shadow: 0px 0px 15px 5px rgb(185, 131, 131);
-      }
+.player-name-text {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 5px solid black;
+  font-size: 2rem;
+  padding: 1rem;
+  display: block;
+  position: absolute;
+  box-shadow: 0px 0px 15px 5px rgb(185, 131, 131);
+}
 
-      .player-name-text.this-player-chosen {
-        background-color: rgb(206, 252, 138);
-        border: 5px solid white;
-      }
+.player-name-text.this-player-chosen {
+  background-color: rgb(206, 252, 138);
+  border: 5px solid white;
+}
 
-      #player-this {
-        bottom: 5px;
-        right: 30vw;
-      }
+#player-this {
+  bottom: 5px;
+  right: 30vw;
+}
 
-      #player-left {
-        bottom: 5px;
-        left: 5px;
-      }
+#player-left {
+  bottom: 5px;
+  left: 5px;
+}
 
-      #player-top {
-        top: 5px;
-        left: 30vw;
-      }
+#player-top {
+  top: 5px;
+  left: 30vw;
+}
 
-      #player-right {
-        top: 5px;
-        right: 5px;
-      }
+#player-right {
+  top: 5px;
+  right: 5px;
+}
 
-      #end-game-display {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: saturate(180%) blur(10px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2;
-      }
+#end-game-display {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: saturate(180%) blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
 
-      #end-game-text {
-        width: 80%;
-        font-size: 6rem;
-        word-wrap: break-word;
-      }
+#end-game-text {
+  width: 80%;
+  font-size: 6rem;
+  word-wrap: break-word;
+}
 
-      .hidden {
-        visibility: hidden;
-      }
+.hidden {
+  visibility: hidden;
+}
 
-      .lost {
-        opacity: 70%;
-      }
+.lost {
+  opacity: 70%;
+}
 
     </style>
   </head>
